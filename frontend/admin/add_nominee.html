@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Add Candidate</title>
+  <link rel="stylesheet" href="../css/style1.css" />
+  <a href="../admin/manage_nominees.html">candidate management</a>
+</head>
+<body>
+  <script src="../js/checkAdmin.js"></script>
+  <h2>Add Nominee</h2>
+  <form id="addNomineeForm">
+    <input type="text" name="name" placeholder="Nominee Name" required />
+    <textarea name="bio" placeholder="Nominee Bio" required></textarea>
+    <input type="text" name="image" placeholder="Image URL (optional)" />
+    <select name="category" id="categorySelect" required>
+      <option value="">Select Category</option>
+    </select>
+    <button type="submit">Add Nominee</button>
+  </form>
+  <p id="message"></p>
+  <script src="../js/add_nominee.js"></script>
+</body>
+</html>

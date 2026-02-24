@@ -1,0 +1,649 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CineAwards </title>
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+      <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    :root {
+      --background: hsl(230, 25%, 8%);
+      --foreground: hsl(45, 100%, 85%);
+      --card: hsl(225, 20%, 12%);
+      --primary: hsl(280, 85%, 65%);
+      --secondary: hsl(195, 100%, 40%);
+      --accent: hsl(315, 100%, 50%);
+      --muted: hsl(45, 20%, 65%);
+      --border: hsl(225, 15%, 25%);
+      
+      --gradient-primary: linear-gradient(135deg, hsl(280, 85%, 65%), hsl(315, 100%, 50%));
+      --gradient-secondary: linear-gradient(135deg, hsl(195, 100%, 40%), hsl(280, 85%, 65%));
+      --gradient-background: linear-gradient(135deg, hsl(230, 25%, 8%), hsl(225, 20%, 12%));
+      --gradient-card: linear-gradient(135deg, hsl(225, 20%, 12%), hsl(225, 15%, 18%));
+      
+      --glow-primary: 0 0 30px hsl(280, 85%, 65%, 0.4);
+      --glow-secondary: 0 0 25px hsl(195, 100%, 40%, 0.4);
+      --glow-accent: 0 0 20px hsl(315, 100%, 50%, 0.4);
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      
+      background: var(--gradient-background);
+      color: var(--foreground);
+      min-height: 100vh;
+      position: relative;
+      overflow-x: hidden;
+    }
+   body::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: 
+    radial-gradient(circle at 20% 60%, hsl(150, 75%, 55%, 0.03) 0%, transparent 80%),
+    radial-gradient(circle at 60% 20%, hsl(195, 100%, 40%, 0.03) 0%, transparent 80%),
+    linear-gradient(to bottom right, rgba(0, 0, 0, 0.1), rgba(0,0,0,0.3)),
+    url('images/cinebg.png') center center / cover no-repeat;
+  z-index: 1;
+  pointer-events: none;
+}
+    /* Navbar */
+    .navbar {
+      position: relative;
+      z-index: 50;
+      background: linear-gradient(to right, hsla(225, 20%, 12%, 0.95), hsla(225, 20%, 12%, 0.8));
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid hsl(225, 15%, 25%, 0.5);
+      padding: 1rem 0;
+    }
+
+    .navbar-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 1.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+     .dropdown-menu {
+  position: absolute;
+  top: 42px;
+  right: 0;
+  background: hsl(225, 20%, 15%);
+  border: 1px solid hsl(225, 15%, 25%);
+  border-radius: 8px;
+  padding: 1rem 0;
+  min-width: 120px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-6px);
+  transition: all 0.25s ease;
+  z-index: 1000;
+}
+
+   .profile-dropdown:hover .dropdown-menu {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+
+ .dropdown-item {
+  padding: 0.4rem 1rem;
+  font-size: 0.88rem;
+  font-weight: 500;
+  color: var(--foreground);
+  text-decoration: none;
+  display: block;
+  transition: background 0.25s ease;
+}
+
+.dropdown-item:hover {
+  background: hsl(225, 15%, 20%);
+}
+
+
+.logout-btn {
+  color: #f5deb3; 
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-weight: 500;
+  font-size: 0.88rem;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  padding: 0.4rem 1rem;
+  transition: background 0.25s ease, color 0.25s ease;
+}
+
+.logout-btn:hover {
+  background: hsl(225, 15%, 20%);
+  color: #ff4d4d; 
+}
+
+.logout-btn i {
+  font-size: 0.9rem;
+}
+.navbar-brand {
+  padding-left: 20px;
+  display: flex;
+  height:45px;
+  align-items: center;
+  text-decoration: none;
+}
+.logo-container {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding-left: 20px;
+}
+.logo-image, .circular-logo {
+  height: 48px; 
+  width: 48px;
+}
+.circular-logo {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  border: 2px solid #e07be0; 
+  object-fit: cover;
+  background-color: black; 
+}
+.cinema-navbar {
+  padding: 0.5rem 0; 
+}
+
+.logo-text {
+  background: linear-gradient(90deg, #db4eff, #6c63ff, #00c9ff);
+  background-clip: text;              
+  -webkit-background-clip: text;      
+  -webkit-text-fill-color: transparent;
+  font-weight: 700;
+  font-size: 1.6rem;
+  text-decoration: none;
+}
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+    }
+
+    .nav-link {
+      color: hsla(45, 100%, 85%, 0.8);
+      text-decoration: none;
+      font-weight: 500;
+      transition: color 0.3s ease;
+    }
+
+    .nav-link:hover {
+      color: var(--primary);
+    }
+     .profile-dropdown {
+      position: relative;
+      cursor: pointer;
+    }
+
+    .profile-icon {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      transition: transform 0.2s;
+      border: 2px solid var(--primary);
+    }
+
+    .profile-icon:hover {
+      transform: scale(1.1);
+      box-shadow: none;
+    }
+    .btn {
+      padding: 0.5rem 1rem;
+      border: 1px solid hsl(280, 85%, 65%, 0.3);
+      background: transparent;
+      color: var(--primary);
+      border-radius: 0.5rem;
+      text-decoration: none;
+      font-weight: 500;
+      transition: all 0.3s ease;
+      cursor: pointer;
+    }
+
+    .btn:hover {
+      background: var(--primary);
+      color: white;
+    }
+
+    /* Main Content */
+    .main-content {
+      position: relative;
+      z-index: 10;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 4rem 1.5rem;
+    }
+
+    .header-section {
+      text-align: center;
+      margin-bottom: 4rem;
+      animation: cinema-entrance 0.8s ease-out forwards;
+    }
+
+    .back-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-bottom: 2rem;
+      color: var(--muted);
+      text-decoration: none;
+      font-weight: 500;
+      transition: color 0.3s ease;
+    }
+
+    .back-btn:hover {
+      color: var(--primary);
+    }
+
+    .page-title {
+      font-size: clamp(2.5rem, 6vw, 4rem);
+      font-weight: 700;
+      margin-bottom: 1.5rem;
+      background: var(--gradient-primary);
+      background-clip: text;             
+     -webkit-background-clip: text;      
+      -webkit-text-fill-color: transparent;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .page-subtitle {
+      font-size: 1.125rem;
+      color: var(--muted);
+      max-width: 42rem;
+      margin: 0 auto;
+    }
+
+    /* Categories Grid */
+    .categories-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 1.5rem;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    .category-card {
+      position: relative;
+      background: var(--gradient-card);
+      border: 1px solid hsl(225, 15%, 25%, 0.3);
+      border-radius: 0.75rem;
+      height: 12rem;
+      cursor: pointer;
+      overflow: hidden;
+      transition: all 0.5s ease;
+      animation: cinema-entrance 0.8s ease-out forwards;
+      opacity: 0;
+      transform: translateY(20px);
+    }
+
+    .category-card:nth-child(1) { animation-delay: 0.15s; }
+    .category-card:nth-child(2) { animation-delay: 0.30s; }
+    .category-card:nth-child(3) { animation-delay: 0.45s; }
+    .category-card:nth-child(4) { animation-delay: 0.60s; }
+    .category-card:nth-child(5) { animation-delay: 0.75s; }
+    .category-card:nth-child(6) { animation-delay: 0.90s; }
+
+    .category-card:hover {
+      transform: translateY(-8px) scale(1.02);
+      box-shadow: var(--glow-primary);
+    }
+
+    .category-content {
+      padding: 1.5rem;
+      height: 100%;
+      display: flex;
+      transition: opacity 0.3s ease;
+      z-index: 1;
+      position: relative;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .category-title {
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: var(--foreground);
+      margin-bottom: 1rem;
+      text-align: center;
+    }
+
+    .category-divider {
+      width: 3rem;
+      height: 4px;
+      background: var(--gradient-primary);
+      margin: 0 auto;
+      border-radius: 2px;
+    }
+
+    /* Description Overlay */
+   .category-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, hsla(280, 85%, 65%, 0.685), hsla(315, 100%, 50%, 0.455));
+  backdrop-filter: blur(10px);
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  opacity: 0;
+  transform: translateX(-100%);
+  transition: transform 0.5s ease, opacity 0.5s ease;
+  z-index: 2;
+  border-radius: 0.75rem;
+}
+
+
+.category-card:hover .category-overlay {
+  transform: translateX(0);
+  opacity: 1;
+}
+
+.category-card:hover {
+  transform: translateY(-8px) scale(1.02);
+  box-shadow: var(--glow-primary);
+  background: linear-gradient(135deg, hsl(225, 20%, 10%), hsl(225, 15%, 15%)); /* darker on hover */
+}
+
+
+    .overlay-title {
+      font-size: 1.125rem;
+      font-weight: 600;
+      color: white;
+      margin-bottom: 1rem;
+      text-align: center;
+    }
+
+  .overlay-description {
+  color: hsla(0, 0%, 100%, 0.95);
+  font-size: 0.95rem;
+  line-height: 1.7;
+  text-align: left;
+  padding-left: 1rem;
+}
+
+.category-card:hover .category-content {
+  opacity: 0;
+}
+
+    .typewriter {
+      overflow: hidden;
+      border-right: 2px solid var(--accent);
+      white-space: nowrap;
+      animation: typing 2s steps(40, end), blink 0.75s step-end infinite;
+    }
+
+    .no-cursor {
+      border-right: none;
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 4rem 1rem;
+    }
+
+    .empty-message {
+      font-size: 1.25rem;
+      color: var(--muted);
+    }
+
+
+
+    /* Animations */
+    @keyframes cinema-entrance {
+      0% {
+        opacity: 0;
+        transform: translateY(30px) scale(0.9);
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    @keyframes typing {
+      from { width: 0; }
+      to { width: 100%; }
+    }
+
+    @keyframes blink {
+      from, to { border-color: transparent; }
+      50% { border-color: var(--accent); }
+    }
+
+    @keyframes pulse {
+      0%, 100% {
+        opacity: 0.6;
+      }
+      50% {
+        opacity: 1;
+      }
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .navbar-container {
+        padding: 0 1rem;
+      }
+
+      .nav-links {
+        gap: 1rem;
+      }
+
+      .main-content {
+        padding: 2rem 1rem;
+      }
+
+      .header-section {
+        margin-bottom: 2rem;
+      }
+
+      .categories-grid {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+      }
+
+      .category-card {
+        height: 10rem;
+      }
+
+      .category-content {
+        padding: 1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Navbar -->
+  <nav class="navbar">
+   <div class="navbar-container">
+     <a href="home.html" class="navbar-brand logo-wrapper">
+  <div class="navbar-brand logo-container">
+  <img src="images/logo2pr.png" alt="CineAwards Logo" class="circular-logo">
+  <span class="logo-text">CineAwards</span>
+</div>
+</a>
+      
+      <div class="nav-links">
+        <a href="home.html" class="nav-link">Home</a>
+        <a href="results.html" class="nav-link">Winners</a>
+        <a href="group.html" class="nav-link">Categories</a>
+       <div class="profile-dropdown">
+  <img src="https://cdn-icons-png.flaticon.com/512/149/149071.png" alt="Profile" class="profile-icon">
+  <div class="dropdown-menu">
+    <a href="profile.html" class="dropdown-item">👤 Profile</a>
+    <button onclick="logout()" class="dropdown-item logout-btn">
+      <i class="fa fa-sign-out" aria-hidden="true" style="margin-right: 6px;"></i>Logout
+    </button>
+  </div>
+</div>
+
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Content -->
+  <main class="main-content">
+    <section class="header-section">
+      <a href="group.html" class="back-btn">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="m15 18-6-6 6-6"/>
+        </svg>
+        Back to Categories
+      </a>
+      
+      <h1 class="page-title" id="pageTitle">Loading...</h1>
+      <p class="page-subtitle" id="pageSubtitle">
+        Discover the categories in this group. Hover over each card to see detailed descriptions.
+      </p>
+    </section>
+    <div class="categories-grid" id="categoriesGrid">
+      <!-- Categories will be populated -->
+    </div>
+
+    <div class="empty-state" id="emptyState" style="display: none;">
+      <p class="empty-message">No categories found for this group</p>
+    </div>
+  </main>
+
+
+  <script>
+  const BASE_URL = window.location.hostname === "localhost"
+  ? "http://localhost:3000"
+  : "https://cineawards.onrender.com";
+  function getGroupFromURL() {
+    const params = new URLSearchParams(window.location.search);
+    return params.get('group');
+  }
+ function typeWriterLines(element, lines, speed = 25, delay = 300) {
+  element.innerHTML = '';
+  let i = 0;
+
+  function typeLine() {
+    if (i >= lines.length) return;
+
+    const line = lines[i].trim();
+    if (!line) {
+      i++;
+      typeLine();
+      return;
+    }
+
+    const lineElem = document.createElement('div');
+    lineElem.classList.add('typewriter-line');
+    element.appendChild(lineElem);
+
+    let j = 0;
+    function typeChar() {
+      if (j <= line.length) {
+        lineElem.textContent = line.substring(0, j);
+        j++;
+        setTimeout(typeChar, speed);
+      } else {
+        i++;
+        setTimeout(typeLine, delay);
+      }
+    }
+    typeChar();
+  }
+
+  typeLine();
+}
+  async function loadCategories() {
+    const group = getGroupFromURL();
+    const pageTitle = document.getElementById('pageTitle');
+    const pageSubtitle = document.getElementById('pageSubtitle');
+    const categoriesGrid = document.getElementById('categoriesGrid');
+    const emptyState = document.getElementById('emptyState');
+  if (!group) {
+  pageTitle.textContent = "No Group Selected";
+  pageSubtitle.textContent = "Please select a group first to view categories.";
+  emptyState.style.display = 'block';
+  categoriesGrid.innerHTML = '';
+  return;
+}
+    pageTitle.textContent = `${group} Categories`;
+    pageSubtitle.textContent = `Discover the categories in ${group}. Hover over each card to see detailed descriptions.`;
+
+    try {
+      console.log('Fetching /categories/grouped...');
+      const res = await fetch(`${BASE_URL}/category/grouped`);
+      const data = await res.json();
+      const categories = data[group] || [];
+
+      if (!categories.length) return emptyState.style.display = 'block';
+
+      categories.forEach((category, index) => {
+        const categoryCard = document.createElement('div');
+        categoryCard.className = 'category-card';
+        categoryCard.style.animationDelay = `${index * 0.15}s`;
+
+        categoryCard.innerHTML = `
+          <div class="category-content">
+            <h3 class="category-title">${category.name}</h3>
+            <div class="category-divider"></div>
+          </div>
+          <div class="category-overlay">
+            <div class="overlay-description"></div>
+          </div>
+        `;
+
+        const overlayDescription = categoryCard.querySelector('.overlay-description');
+
+       categoryCard.addEventListener('mouseenter', () => {
+       overlayDescription.innerHTML = '';
+  const lines = category.description.split(/[.\n]/).filter(l => l.trim());
+  setTimeout(() => typeWriterLines(overlayDescription, lines), 100);
+});
+        categoryCard.addEventListener('mouseleave', () => {
+          overlayDescription.innerHTML = '';
+        });
+        categoryCard.addEventListener('click', () => {
+    const token = localStorage.getItem('token');
+     if (!token) {
+      alert("Please log in to view nominees.");
+      return;
+    }
+        console.log("Navigating to nominees.html with ID:", category._id);
+      window.location.href = `nominees.html?categoryId=${category._id}&group=${encodeURIComponent(group)}`;
+  });
+
+        categoriesGrid.appendChild(categoryCard);
+      });
+    } catch (err) {
+      console.error('Failed to load category group', err);
+    }
+  }
+  document.addEventListener('DOMContentLoaded', () => {
+  loadCategories();
+});
+</script>
+<script>
+  function logout() {
+    localStorage.removeItem('token');
+    window.location.href = 'login.html';
+  }
+</script>
+</body>
+</html>

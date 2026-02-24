@@ -1,0 +1,853 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CineAwards</title>
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    :root {
+      --background: hsl(230, 25%, 8%);
+      --foreground: hsl(45, 100%, 85%);
+      --card: hsl(225, 20%, 12%);
+      --primary: hsl(280, 85%, 65%);
+      --secondary: hsl(195, 100%, 40%);
+      --accent: hsl(315, 100%, 50%);
+      --muted: hsl(45, 20%, 65%);
+      --border: hsl(225, 15%, 25%);
+      --success: hsl(142, 76%, 36%);
+      --error: hsl(0, 84%, 60%);
+      
+      
+      --gradient-primary: linear-gradient(135deg, hsl(280, 85%, 65%), hsl(315, 100%, 50%));
+      --gradient-secondary: linear-gradient(135deg, hsl(195, 100%, 40%), hsl(280, 85%, 65%));
+      --gradient-background: linear-gradient(135deg, hsl(230, 25%, 8%), hsl(225, 20%, 12%));
+      --gradient-card: linear-gradient(135deg, hsl(225, 20%, 12%), hsl(225, 15%, 18%));
+      
+     
+      --glow-primary: 0 0 30px hsl(280, 85%, 65%, 0.4);
+      --glow-secondary: 0 0 25px hsl(195, 100%, 40%, 0.4);
+      --glow-accent: 0 0 20px hsl(315, 100%, 50%, 0.4);
+      --glow-success: 0 0 20px hsl(142, 76%, 36%, 0.4);
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--gradient-background);
+      color: var(--foreground);
+      min-height: 100vh;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    
+   body::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: 
+    radial-gradient(circle at 20% 60%, hsl(150, 75%, 55%, 0.03) 0%, transparent 80%),
+    radial-gradient(circle at 60% 20%, hsl(195, 100%, 40%, 0.03) 0%, transparent 80%),
+    linear-gradient(to bottom right, rgba(0, 0, 0, 0.1), rgba(0,0,0,0.3)),
+    url('images/cinebg.png') center center / cover no-repeat;
+  z-index: 1;
+  pointer-events: none;
+}
+
+    /* Navbar */
+    .navbar {
+      position: relative;
+      z-index: 50;
+      background: linear-gradient(to right, hsla(225, 20%, 12%, 0.95), hsla(225, 20%, 12%, 0.8));
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid hsl(225, 15%, 25%, 0.5);
+      padding: 1rem 0;
+    }
+
+    .navbar-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 1.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      text-decoration: none;
+      transition: all 0.3s ease;
+    }
+
+    .logo:hover .logo-icon {
+      color: var(--accent);
+    }
+
+    .logo-icon {
+      width: 2rem;
+      height: 2rem;
+      color: var(--primary);
+      transition: color 0.3s ease;
+    }
+
+    .logo-text {
+      font-size: 1.5rem;
+      font-weight: 700;
+      background: var(--gradient-primary);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+    }
+
+    .nav-link {
+      color: hsla(45, 100%, 85%, 0.8);
+      text-decoration: none;
+      font-weight: 500;
+      transition: color 0.3s ease;
+    }
+
+    .nav-link:hover {
+      color: var(--primary);
+    }
+
+    .profile-dropdown {
+      position: relative;
+      cursor: pointer;
+    }
+
+    .profile-icon {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      transition: transform 0.2s;
+      border: 2px solid var(--primary);
+    }
+
+    .profile-icon:hover {
+      transform: scale(1.1);
+      box-shadow: var(--glow-primary);
+    }
+    
+     .dropdown-menu {
+  position: absolute;
+  top: 42px;
+  right: 0;
+  background: hsl(225, 20%, 15%);
+  border: 1px solid hsl(225, 15%, 25%);
+  border-radius: 8px;
+  padding: 1rem 0;
+  min-width: 120px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-6px);
+  transition: all 0.25s ease;
+  z-index: 1000;
+}
+
+   .profile-dropdown:hover .dropdown-menu {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+
+ .dropdown-item {
+  padding: 0.4rem 1rem;
+  font-size: 0.88rem;
+  font-weight: 500;
+  color: var(--foreground);
+  text-decoration: none;
+  display: block;
+  transition: background 0.25s ease;
+}
+
+.dropdown-item:hover {
+  background: hsl(225, 15%, 20%);
+}
+
+
+.logout-btn {
+  color: #f5deb3; 
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-weight: 500;
+  font-size: 0.88rem;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  padding: 0.4rem 1rem;
+  transition: background 0.25s ease, color 0.25s ease;
+}
+
+.logout-btn:hover {
+  background: hsl(225, 15%, 20%);
+  color: #ff4d4d; 
+}
+
+.logout-btn i {
+  font-size: 0.9rem;
+}
+    /* Main Content */
+    .main-content {
+      position: relative;
+      z-index: 10;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 4rem 1.5rem;
+    }
+
+    .header-section {
+      text-align: center;
+      margin-bottom: 3rem;
+      animation: cinema-entrance 0.8s ease-out forwards;
+    }
+
+    .page-title {
+  font-size: clamp(2.5rem, 6vw, 4rem);
+  font-weight: 700;
+  margin-bottom: 1rem;
+  background: linear-gradient(90deg, hsl(315, 100%, 65%), hsl(280, 85%, 65%));
+background-clip: text;              
+  -webkit-background-clip: text;      
+  -webkit-text-fill-color: transparent;
+  text-align: center;
+}
+
+    .voting-status {
+      display: inline-block;
+      padding: 0.75rem 1.5rem;
+      border-radius: 0.5rem;
+      font-weight: 600;
+      font-size: 1.125rem;
+      margin-bottom: 2rem;
+      backdrop-filter: blur(10px);
+      border: 1px solid;
+      animation: cinema-entrance 0.8s ease-out 0.2s forwards;
+      opacity: 0;
+      transform: translateY(20px);
+    }
+
+    .status-open {
+      background: hsla(142, 76%, 36%, 0.1);
+      border-color: var(--success);
+      color: var(--success);
+      box-shadow: var(--glow-success);
+    }
+
+    .status-closed {
+      background: hsla(0, 84%, 60%, 0.1);
+      border-color: var(--error);
+      color: var(--error);
+      box-shadow: 0 0 20px hsl(0, 84%, 60%, 0.4);
+    }
+
+    /* Nominees Grid */
+   .nominees-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2rem;
+  justify-content: center;
+  padding: 2rem 0;
+}
+
+.nominee-card {
+  width: 240px;
+  background: linear-gradient(135deg, hsl(250, 15%, 14%), hsl(255, 12%, 20%));
+  border: 2px solid hsla(280, 98%, 17%, 0.932);
+  border-radius: 1rem;
+  padding: 1.5rem 1rem;
+  text-align: center;
+  position: relative;
+  box-shadow: 0 0 18px rgba(0, 0, 0, 0.6);
+  overflow: hidden;
+  transition: transform 0.5s ease, box-shadow 0.5s ease, border-color 0.3s;
+  animation: nominee-fade-in 0.6s ease forwards;
+  opacity: 0;
+  transform: translateY(30px);
+  backdrop-filter: blur(12px);
+}
+@keyframes glow-text {
+  from { text-shadow: 0 0 10px hsl(45, 90%, 60%); }
+  to   { text-shadow: 0 0 20px hsl(45, 100%, 70%); }
+}
+
+
+
+.nominee-card:hover {
+  transform: translateY(-12px) scale(1.04);
+  box-shadow: 0 0 45px hsl(280, 85%, 65%, 0.4);
+  border-color: hsl(280, 85%, 65%);
+  background: linear-gradient(135deg, hsl(255, 20%, 25%), hsl(275, 30%, 35%));
+}
+
+.nominee-card:hover::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -75%;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(120deg, transparent, rgba(255, 255, 255, 0.25), transparent);
+  transform: skewX(-25deg);
+  animation: shimmer 1.5s infinite;
+}
+
+@keyframes nominee-fade-in {
+  0% {
+    opacity: 0;
+    transform: translateY(30px) scale(0.95);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+@keyframes shimmer {
+  0%   { left: -75%; }
+  100% { left: 125%; }
+}
+
+.nominee-image-vertical {
+  width: 100%;
+  height: 220px;
+  object-fit: cover;
+  border-radius: 10px;
+  border: 2px solid var(--primary);
+  margin-bottom: 1rem;
+}
+
+.nominee-name {
+  font-size: 1.1rem;
+  font-weight: 700;
+  background: var(--gradient-primary);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-bottom: 0.5rem;
+}
+
+.meta {
+  font-size: 0.9rem;
+  color: var(--muted);
+  margin-bottom: 0.3rem;
+}
+
+.nominee-description {
+  font-size: 0.85rem;
+  min-height: 40px;
+  color: var(--muted);
+  white-space: pre-line;
+  margin: 0.5rem 0 1rem;
+  transition: opacity 0.3s;
+}
+    .nominee-card:nth-child(1) { animation-delay: 0.1s; }
+    .nominee-card:nth-child(2) { animation-delay: 0.2s; }
+    .nominee-card:nth-child(3) { animation-delay: 0.3s; }
+    .nominee-card:nth-child(4) { animation-delay: 0.4s; }
+    .nominee-card:nth-child(5) { animation-delay: 0.5s; }
+    .nominee-card:nth-child(6) { animation-delay: 0.6s; }
+    .nominee-content {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 2rem;
+      align-items: center;
+    }
+   .text-content {
+  flex: 1;
+  padding-right: 20px;
+}
+  .cinema-navbar {
+  padding: 0.5rem 0; /* reduce vertical padding */
+}
+.navbar-brand {
+  padding-left: 20px;
+  display: flex;
+  height:45px;
+  align-items: center;
+  text-decoration: none;
+}
+.logo-container {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding-left: 20px;
+}
+.logo-image, .circular-logo {
+  height: 48px; /* smaller logo */
+  width: 48px;
+}
+.circular-logo {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  border: 2px solid #e07be0; 
+  object-fit: cover;
+  background-color: black; 
+}
+
+.logo-text {
+  background: linear-gradient(90deg, #db4eff, #6c63ff, #00c9ff);
+   background-clip: text;            
+  -webkit-background-clip: text;      
+  -webkit-text-fill-color: transparent;
+  font-weight: 700;
+  font-size: 1.6rem;
+  text-decoration: none;
+}
+
+    .nominee-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 1rem;
+    }
+
+    .image-and-vote {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+ 
+    .vote-btn {
+  background: var(--gradient-primary);
+  color: white;
+  font-weight: 600;
+  position:relative;
+  overflow:hidden;
+  font-size: 1rem;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.3s ease;
+    }
+
+    .vote-btn::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+      transition: left 0.5s;
+    }
+
+    .vote-btn:hover::before {
+      left: 100%;
+    }
+    .vote-btn:hover {
+    transform: scale(1.05);
+     background: linear-gradient(45deg, #ff3399, #5555ff);
+     }
+
+    .vote-btn:disabled {
+      background: hsl(225, 15%, 25%);
+      color: hsl(45, 20%, 45%);
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: none;
+    }
+
+    .vote-btn:disabled::before {
+      display: none;
+    }
+     .back-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-bottom: 2rem;
+      color: var(--muted);
+      text-decoration: none;
+      font-weight: 500;
+      transition: color 0.3s ease;
+    }
+
+    .back-btn:hover {
+      color: var(--primary);
+    }
+    
+
+    .nominee-card:hover .nominee-image {
+      box-shadow: var(--glow-primary);
+    }
+
+    /* Empty State */
+    .empty-state {
+      text-align: center;
+      padding: 4rem 2rem;
+      background: var(--gradient-card);
+      border-radius: 1rem;
+      border: 1px solid var(--border);
+      backdrop-filter: blur(10px);
+    }
+
+    .empty-message {
+      font-size: 1.25rem;
+      color: var(--muted);
+      margin-bottom: 1rem;
+    }
+
+    .empty-icon {
+      width: 4rem;
+      height: 4rem;
+      color: var(--primary);
+      margin: 0 auto 1rem;
+    }
+
+    /* Toast Popup */
+    .toast {
+      position: fixed;
+      bottom: 2rem;
+      left: 50%;
+      transform: translateX(-50%);
+      padding: 1rem 2rem;
+      border-radius: 0.5rem;
+      color: white;
+      font-weight: 600;
+      z-index: 9999;
+      backdrop-filter: blur(10px);
+      border: 1px solid;
+      animation: toast-slide-in 0.3s ease-out;
+    }
+
+    .toast.success {
+      background: hsla(142, 76%, 36%, 0.9);
+      border-color: var(--success);
+      box-shadow: var(--glow-success);
+    }
+
+    .toast.error {
+      background: hsla(0, 84%, 60%, 0.9);
+      border-color: var(--error);
+      box-shadow: 0 0 20px hsl(0, 84%, 60%, 0.4);
+    }
+
+    /* Loading State */
+    .loading {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 4rem;
+      font-size: 1.25rem;
+      color: var(--muted);
+    }
+
+    .loading::after {
+      content: '';
+      width: 2rem;
+      height: 2rem;
+      border: 3px solid var(--border);
+      border-top: 3px solid var(--primary);
+      border-radius: 50%;
+      margin-left: 1rem;
+      animation: spin 1s linear infinite;
+    }
+
+    /* Animations */
+    @keyframes cinema-entrance {
+      0% {
+        opacity: 0;
+        transform: translateY(30px) scale(0.9);
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    @keyframes slide-in-up {
+      0% {
+        opacity: 0;
+        transform: translateY(40px);
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes toast-slide-in {
+      0% {
+        opacity: 0;
+        transform: translateX(-50%) translateY(100%);
+      }
+      100% {
+        opacity: 1;
+        transform: translateX(-50%) translateY(0);
+      }
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .navbar-container {
+        padding: 0 1rem;
+      }
+
+      .nav-links {
+        gap: 1rem;
+      }
+
+      .main-content {
+        padding: 2rem 1rem;
+      }
+
+      .nominee-content {
+        grid-template-columns: 1fr;
+        text-align: center;
+      }
+
+      .nominee-header {
+        flex-direction: column;
+        align-items: center;
+        gap: 1rem;
+      }
+
+      .nominee-image {
+        width: 120px;
+        height: 120px;
+        justify-self: center;
+      }
+
+      .vote-btn {
+        width: 100%;
+        max-width: 200px;
+      }
+    }
+   #categoryTitle {
+  text-align: center;
+  font-size: 2.25rem;
+  font-weight: 700;
+  margin-bottom: 2rem;
+   background: linear-gradient(45deg, hsl(200, 100%, 70%), hsl(160, 90%, 65%));
+ background-clip: text;             
+  -webkit-background-clip: text;      
+  -webkit-text-fill-color: transparent;
+  animation: glow-text 1s ease-in-out infinite alternate;
+}
+
+  </style>
+</head>
+<body>
+  <!-- Navbar -->
+  <nav class="navbar">
+   <div class="navbar-container">
+     <a href="home.html" class="navbar-brand logo-wrapper">
+  <div class="navbar-brand logo-container">
+  <img src="images/logo2pr.png" alt="CineAwards Logo" class="circular-logo">
+  <span class="logo-text">CineAwards</span>
+</div>
+</a>
+      <div class="nav-links">
+        <a href="home.html" class="nav-link">Home</a>
+        <a href="group.html" class="nav-link">Vote</a>
+       <a href="#" onclick="goBackToCategories()" class="nav-link">Categories</a>
+         <div class="profile-dropdown">
+  <img src="https://cdn-icons-png.flaticon.com/512/149/149071.png" alt="Profile" class="profile-icon">
+  <div class="dropdown-menu">
+    <a href="profile.html" class="dropdown-item">👤 Profile</a>
+    <button onclick="logout()" class="dropdown-item logout-btn">
+      <i class="fa fa-sign-out" aria-hidden="true" style="margin-right: 6px;"></i>Logout
+    </button>
+  </div>
+</div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Content -->
+  <main class="main-content">
+    <section class="header-section">
+       <a href="#" onclick="goBackToCategories()" class="back-btn">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="m15 18-6-6 6-6"/>
+        </svg>
+        Back to Categories
+      </a>
+      <h1 class="page-title">Nominees</h1>
+      <div id="votingStatus" class="voting-status" style="display: none;">
+        <!-- Status will be populated  -->
+      </div>
+    </section>
+     <h2 id="categoryTitle">Nominees</h2>
+    <div class="nominees-container" id="nomineeList">
+      <div class="loading">Loading nominees...</div>
+    </div>
+
+    <div class="empty-state" id="emptyState" style="display: none;">
+      <svg class="empty-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M9 12l2 2 4-4"/>
+        <path d="M21 12c.552 0 1-.448 1-1s-.448-1-1-1"/>
+        <path d="M3 12c-.552 0-1-.448-1-1s.448-1 1-1"/>
+        <path d="M12 21c0 .552-.448 1-1 1s-1-.448-1-1"/>
+        <path d="M12 3c0-.552-.448-1-1-1s1-.448 1-1"/>
+      </svg>
+      <p class="empty-message">No nominees found for this category</p>
+      <p style="color: var(--muted); font-size: 0.9rem;">Please select a category to view nominees.</p>
+    </div>
+  </main>
+  <script>
+  const BASE_URL = window.location.hostname === "localhost"
+  ? "http://localhost:3000"
+  : "https://cineawards.onrender.com";
+ const token = localStorage.getItem("token");
+    const user = JSON.parse(atob(token.split('.')[1])); // JWT decode
+    const isAdmin = user?.role === 'admin';
+    let hasVoted = false;
+
+    document.addEventListener("DOMContentLoaded", loadNominees);
+
+    async function loadNominees() {
+      const params = new URLSearchParams(window.location.search);
+      const categoryId = params.get("categoryId");
+      if (!categoryId) return showError("Missing or invalid category.");
+
+      try {
+        const res = await fetch(`${BASE_URL}/nominee/nominees/category/${categoryId}`, {
+          headers: { Authorization: `Bearer ${token}` }
+        });
+
+        if (!res.ok) return showError("Failed to load nominees");
+
+        const { nominees, category } = await res.json();
+        renderNominees(nominees, category);
+      } catch (err) {
+        showError("An unexpected error occurred.");
+      }
+    }
+
+    async function voteForNominee(nomineeId, btn) {
+      if (isAdmin) return showToast("Admins cannot vote", true);
+      try {
+        const res = await fetch(`${BASE_URL}/nominee/vote/${nomineeId}`, {
+          method: 'POST',
+          headers: { 'Authorization': `Bearer ${token}` }
+        });
+
+        const data = await res.json();
+
+        if (res.ok) {
+          showToast("Vote recorded successfully!", false);
+          hasVoted = true;
+          disableVoteButtons();
+        } else {
+          showToast(data.message || "Vote failed", true);
+        }
+      } catch (err) {
+        showToast("Error casting vote", true);
+      }
+    }
+
+    function disableVoteButtons() {
+      document.querySelectorAll('.vote-btn').forEach(btn => btn.disabled = true);
+    }
+
+    function renderNominees(nominees, category) {
+      const container = document.getElementById("nomineeList");
+      const titleEl = document.getElementById("categoryTitle");
+      if (titleEl) {titleEl.textContent = category.name;
+      titleEl.style.marginBottom = "1.5rem";}
+      if (nominees.length === 0) return showError("No nominees found");
+
+  container.innerHTML = nominees.map((n, i) => `
+  <div class="nominee-card" style="animation-delay:${i * 0.2}s;" onmouseenter="startTypewriter(this)" onmouseleave="stopTypewriter(this)">
+    <img src="${n.image}" class="nominee-image-vertical" alt="Nominee Image">
+    <h3 class="nominee-name">${n.name}</h3>
+    ${n.film ? `<p class="meta"><strong>Film:</strong> ${n.film}</p>` : ''}
+    ${n.role ? `<p class="meta"><strong>Role:</strong> ${n.role}</p>` : ''}
+    <div class="nominee-description typewriter-target" data-description="${n.description || ''}"></div>
+    <button class="vote-btn" onclick="voteForNominee('${n._id}')">Vote</button>
+  </div>
+`).join('');
+
+      if (isAdmin) {
+        disableVoteButtons();
+        showToast("Admins cannot vote", true);
+      }
+    }
+
+    function showError(msg) {
+      document.getElementById("nomineeList").innerHTML = `<p style="color:var(--muted);text-align:center;">${msg}</p>`;
+    }
+
+    function showToast(message, isError = false) {
+      const toast = document.getElementById("toast");
+      if (!toast) return;
+      toast.textContent = message;
+      toast.className = `toast ${isError ? 'error' : 'success'}`;
+      toast.style.display = "block";
+      setTimeout(() => toast.style.display = "none", 3000);
+    }
+</script>
+<script>
+  function goBackToCategories() {
+    const params = new URLSearchParams(window.location.search);
+    const group = params.get('group');
+    if (group) {
+      window.location.href = `categories.html?group=${encodeURIComponent(group)}`;
+    } else {
+      alert("No group selected");
+      window.location.href = `categories.html`;
+    }
+  }
+</script>
+<script>
+let typewriterInterval;
+
+function startTypewriter(card) {
+  const descBox = card.querySelector('.typewriter-target');
+  const fullText = descBox.getAttribute('data-description');
+  descBox.innerHTML = '';
+  let index = 0;
+
+  clearInterval(typewriterInterval);
+  typewriterInterval = setInterval(() => {
+    if (index < fullText.length) {
+      descBox.innerHTML += fullText[index];
+      index++;
+    } else {
+      clearInterval(typewriterInterval);
+    }
+  }, 25);
+}
+
+function stopTypewriter(card) {
+  clearInterval(typewriterInterval);
+  const descBox = card.querySelector('.typewriter-target');
+  descBox.innerHTML = '';
+}
+</script>
+
+<script>
+  function logout() {
+    localStorage.removeItem('token');
+    window.location.href = 'login.html';
+  }
+</script>
+<div id="toast" class="toast" style="display: none;"></div>
+</body>
+</html>

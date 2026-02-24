@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Add Category</title>
+</head>
+<body>
+    <script src="../js/checkAdmin.js"></script>
+    <a href="manage_category.html">manage categories</a>
+  <h2>Add Category</h2>
+  <form id="addCategoryForm">
+    <input type="text" name="name" placeholder="Category Name" required />
+    <textarea name="description" placeholder="Description (optional)"></textarea>
+    <input type="datetime-local" name="votingStart" required />
+    <input type="datetime-local" name="votingEnd" required />
+    <button type="submit">Add Category</button>
+  </form>
+  <p id="message"></p>
+
+  <script src="../js/add_category.js">
+  </script>
+</body>
+</html>

@@ -1,0 +1,758 @@
+ <!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CineAwards</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+       
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    :root {
+      
+      --background: hsl(230, 25%, 8%);
+      --foreground: hsl(45, 100%, 85%);
+      --card: hsl(225, 20%, 12%);
+      --primary: hsl(280, 85%, 65%);
+      --secondary: hsl(195, 100%, 40%);
+      --accent: hsl(315, 100%, 50%);
+      --muted: hsl(45, 20%, 65%);
+      --border: hsl(225, 15%, 25%);
+      
+      
+      --gradient-primary: linear-gradient(135deg, hsl(280, 85%, 65%), hsl(315, 100%, 50%));
+      --gradient-secondary: linear-gradient(135deg, hsl(195, 100%, 40%), hsl(280, 85%, 65%));
+      --gradient-background: linear-gradient(135deg, hsl(230, 25%, 8%), hsl(225, 20%, 12%));
+      --gradient-card: linear-gradient(135deg, hsl(225, 20%, 12%), hsl(225, 15%, 18%));
+      
+      
+      --glow-primary: 0 0 30px hsl(280, 85%, 65%, 0.4);
+      --glow-secondary: 0 0 25px hsl(195, 100%, 40%, 0.4);
+      --glow-accent: 0 0 20px hsl(315, 100%, 50%, 0.4);
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--gradient-background);
+      color: var(--foreground);
+      min-height: 100vh;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    
+   body::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: 
+    radial-gradient(circle at 20% 60%, hsl(150, 75%, 55%, 0.03) 0%, transparent 80%),
+    radial-gradient(circle at 60% 20%, hsl(195, 100%, 40%, 0.03) 0%, transparent 80%),
+    linear-gradient(to bottom right, rgba(0, 0, 0, 0.1), rgba(0,0,0,0.3)),
+    url('images/cinebg.png') center center / cover no-repeat;
+  z-index: 0;
+  pointer-events: none;
+}
+    /* Navbar */
+    .cinema-navbar {
+      position: relative;
+      top:0;
+      left:0;
+      right:0;
+      z-index: 50;
+      background: linear-gradient(to right, hsla(225, 20%, 12%, 0.95), hsla(225, 20%, 12%, 0.8));
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid hsl(225, 15%, 25%, 0.5);
+      padding: 1rem 0;
+    }
+
+    .navbar-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 1.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  text-decoration: none;
+}
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+      list-style: none;
+    }
+
+    .nav-links a {
+      color: hsla(45, 100%, 85%, 0.8);
+      text-decoration: none;
+      font-weight: 500;
+      transition: color 0.3s ease;
+    }
+
+    .nav-links a:hover {
+      color: var(--primary);
+    }
+
+    /* Hero Section */
+    .hero-section {
+      position: relative;
+      z-index: 10;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 2rem 1.5rem;
+    }
+
+    .hero-content {
+      max-width: 800px;
+      animation: cinema-entrance 1s ease-out forwards;
+    }
+
+    .hero-title {
+      font-size: clamp(3rem, 8vw, 6rem);
+      font-weight: 700;
+      margin-bottom: 1.5rem;
+      background: var(--gradient-primary);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: glow-pulse 2s ease-in-out infinite alternate;
+    }
+
+    .hero-subtitle {
+      font-size: clamp(1.125rem, 3vw, 1.5rem);
+      color: var(--muted);
+      margin-bottom: 2rem;
+      line-height: 1.6;
+    }
+
+    .hero-buttons {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-bottom: 3rem;
+    }
+
+    .btn {
+      padding: 0.875rem 2rem;
+      border-radius: 0.75rem;
+      text-decoration: none;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      cursor: pointer;
+      border: none;
+      font-size: 1rem;
+    }
+
+    .btn-primary {
+      background: var(--gradient-primary);
+      color: white;
+      box-shadow: var(--glow-primary);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--glow-primary), 0 8px 25px hsla(280, 85%, 65%, 0.3);
+    }
+
+    .btn-secondary {
+      background: transparent;
+      color: var(--primary);
+      border: 2px solid var(--primary);
+    }
+
+    .btn-secondary:hover {
+      background: var(--primary);
+      color: white;
+      transform: translateY(-2px);
+    }
+
+    /* Date Cards */
+    .date-cards {
+      display: flex;
+      gap: 2rem;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .date-card {
+      background: var(--gradient-card);
+      border: 1px solid hsl(225, 15%, 25%, 0.3);
+      border-radius: 0.75rem;
+      padding: 1.5rem 2rem;
+      text-align: center;
+      transition: all 0.3s ease;
+      min-width: 200px;
+    }
+
+    .date-card:hover {
+      transform: translateY(-5px);
+      box-shadow: var(--glow-secondary);
+      border-color: var(--secondary);
+    }
+
+    .date-label {
+      font-size: 0.875rem;
+      color: var(--muted);
+      margin-bottom: 0.5rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .date-value {
+      font-size: 1.125rem;
+      font-weight: 600;
+      color: var(--secondary);
+    }
+
+    /* Content Section */
+    .content-section {
+      position: relative;
+      z-index: 10;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 4rem 1.5rem;
+    }
+
+    .intro-card {
+      background: var(--gradient-card);
+      border: 1px solid hsl(225, 15%, 25%, 0.3);
+      border-radius: 1rem;
+      padding: 3rem;
+      margin-bottom: 3rem;
+      animation: cinema-entrance 0.8s ease-out 0.3s both;
+    }
+
+    .intro-title {
+      font-size: 2.5rem;
+      font-weight: 700;
+      margin-bottom: 1.5rem;
+      background: var(--gradient-secondary);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .intro-text {
+      font-size: 1.125rem;
+      line-height: 1.7;
+      color: var(--muted);
+      margin-bottom: 2rem;
+    }
+
+    .feature-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem;
+      margin-top: 3rem;
+    }
+
+    .feature-card {
+      background: var(--gradient-card);
+      border: 1px solid hsl(225, 15%, 25%, 0.3);
+      border-radius: 0.75rem;
+      padding: 2rem;
+      transition: all 0.3s ease;
+      animation: cinema-entrance 0.8s ease-out both;
+    }
+
+    .feature-card:nth-child(1) { animation-delay: 0.4s; }
+    .feature-card:nth-child(2) { animation-delay: 0.6s; }
+    .feature-card:nth-child(3) { animation-delay: 0.8s; }
+
+    .feature-card:hover {
+      transform: translateY(-5px);
+      box-shadow: var(--glow-accent);
+      border-color: var(--accent);
+    }
+
+    .feature-icon {
+      width: 3rem;
+      height: 3rem;
+      background: var(--gradient-primary);
+      border-radius: 0.75rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 1rem;
+      font-size: 1.5rem;
+    }
+
+    .feature-title {
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: var(--foreground);
+      margin-bottom: 1rem;
+    }
+
+    .feature-description {
+      color: var(--muted);
+      line-height: 1.6;
+    }
+    .cinema-navbar {
+  padding: 0.5rem 0; /* reduce vertical padding */
+}
+.navbar-brand {
+  padding-left: 20px;
+  display: flex;
+  height:60px;
+  align-items: center;
+  text-decoration: none;
+}
+.navbar {
+  background: linear-gradient(to right, #0e0e2e, #1a0f2f, #250c31);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+.logo-container {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding-left: 20px;
+}
+.logo-image, .circular-logo {
+  height: 48px; /* smaller logo */
+  width: 48px;
+}
+.circular-logo {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  border: 2px solid #e07be0; 
+  object-fit: cover;
+  background-color: black; 
+}
+
+.logo-text {
+  background: linear-gradient(90deg, #db4eff, #6c63ff, #00c9ff);
+   background-clip: text;              
+  -webkit-background-clip: text;      
+  -webkit-text-fill-color: transparent;
+  font-weight: 700;
+  font-size: 1.6rem;
+  text-decoration: none;
+}
+
+   .footer-contact {
+  position: relative;
+  background: var(--card);
+  color: var(--foreground);
+  padding: 2rem 1.5rem;
+  border-top: 1px solid var(--border);
+  font-size: 0.95rem;
+}
+.footer-contact-container {
+  max-width: 1200px; 
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start; 
+}
+
+.footer-header {
+  margin-bottom: 0.25rem;
+  text-align: left;
+  max-width: 600px; 
+}
+
+
+.footer-header h2 {
+  font-size: 1.75rem;
+  margin-bottom: 0.5rem;
+  color: var(--primary);
+}
+
+.footer-header p {
+  color: var(--muted);
+  margin-bottom: 2rem;
+}
+
+.footer-grid {
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 3rem; /* Increased spacing between columns */
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-top: 2rem;
+}
+
+
+.footer-column {
+  flex: 1 1 33%; /* occupy equal width */
+  padding: 0 1rem;
+}
+
+
+.footer-column h3 {
+  font-size: 1.2rem;
+  margin-bottom: 1rem;
+  color: var(--accent);
+}
+
+.footer-column p, .footer-column a {
+  color: var(--muted);
+  text-decoration: none;
+  margin-bottom: 0.5rem;
+  display: block;
+}
+
+.footer-form input,
+.footer-form textarea {
+  width: 100%;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  font-size:1rem;
+  min-height: 12px;
+  margin-bottom: 1rem;
+  border: none;
+  border-radius: 0.5rem;
+  background-color: hsl(225, 20%, 18%);
+  color: var(--foreground);
+}
+.footer-column p,
+.footer-column a,
+.footer-column li {
+  font-size: 1rem;
+  line-height: 1.6;
+}
+
+
+.footer-form button {
+  background: var(--gradient-primary);
+  color: white;
+  padding: 0.75rem 1.5rem;
+  border: none;
+  font-weight: 600;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.footer-form button:hover {
+  background: var(--gradient-secondary);
+}
+
+.footer-services {
+  margin-top: 3rem;
+  border-top: 1px solid var(--border);
+  padding-top: 2rem;
+}
+
+.footer-services h3 {
+  font-size: 1.2rem;
+  color: var(--primary);
+  margin-bottom: 1rem;
+}
+
+.footer-services ul {
+  list-style: none;
+  padding: 0;
+}
+
+.footer-services li {
+  margin-bottom: 0.5rem;
+  color: var(--muted);
+}
+
+.socials a {
+  color: var(--primary);
+  font-weight: 500;
+}
+
+    /* Animations */
+    @keyframes cinema-entrance {
+      0% {
+        opacity: 0;
+        transform: translateY(30px) scale(0.9);
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    @keyframes glow-pulse {
+      0% {
+        filter: drop-shadow(0 0 20px hsl(280, 85%, 65%, 0.4));
+      }
+      100% {
+        filter: drop-shadow(0 0 40px hsl(280, 85%, 65%, 0.8));
+      }
+    }
+    @media (max-width: 768px) {
+  .footer-grid {
+    flex-direction: column;
+    gap: 2rem;
+  }
+
+  .footer-contact-container {
+    align-items: center;
+  }
+}
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .navbar-container {
+        padding: 0 1rem;
+      }
+
+      .nav-links {
+        gap: 1rem;
+      }
+
+      .hero-buttons {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .date-cards {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .content-section {
+        padding: 2rem 1rem;
+      }
+
+      .intro-card {
+        padding: 2rem;
+      }
+
+      .feature-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+    .live-top-indicator {
+  position: absolute;
+  top: 20px;
+  right: 30px;
+  background: rgba(255, 0, 0, 0.08);
+  padding: 6px 12px;
+  border-radius: 20px;
+  display: none;
+  align-items: center;
+  gap: 6px;
+  color: #ff0033;
+  font-weight: bold;
+  font-size: 0.9rem;
+  border: 1px solid #ff0033;
+  box-shadow: 0 0 10px rgba(255, 0, 0, 0.3);
+  z-index: 10;
+}
+
+.live-pulse-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background-color: #ff0033;
+  animation: pulseGlow 1.5s infinite ease-in-out;
+  box-shadow: 0 0 0 0 rgba(255, 0, 0, 0.7);
+}
+
+@keyframes pulseGlow {
+  0% {
+    box-shadow: 0 0 0 0 rgba(255, 0, 0, 0.7);
+    transform: scale(1);
+  }
+  50% {
+    box-shadow: 0 0 0 10px rgba(255, 0, 0, 0);
+    transform: scale(1.2);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(255, 0, 0, 0);
+    transform: scale(1);
+  }
+}
+
+  </style>
+</head>
+<body>
+  <!-- Navigation Bar -->
+  <nav class="cinema-navbar">
+    <div class="navbar-container">
+     <a href="home.html" class="navbar-brand logo-wrapper">
+  <div class="navbar-brand logo-container">
+  <img src="images/logo2pr.png" alt="CineAwards Logo" class="circular-logo">
+  <span class="logo-text">CineAwards</span>
+</div>
+</a>
+      <ul class="nav-links">
+        <li><a href="home.html">Home</a></li>
+        <li><a href="group.html">Nominate</a></li>
+         <li><a href="results.html">Winners</a></li>
+        <li><a href="signup.html">Signup</a></li>
+        <li><a href="login.html">Login</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <section class="hero-section">
+     <div class="live-top-indicator" id="liveIndicator">
+    <span class="live-pulse-dot"></span>
+    <span class="live-text">LIVE</span>
+  </div>
+    <div class="hero-content">
+      <h1 class="hero-title">CineAwards</h1>
+      <p class="hero-subtitle">
+        Welcome to CineAwards – Your Gateway to the most prestigious honors in cinema.
+        Track nominations, vote in polls, and celebrate cinematic excellence.
+      </p>
+      
+      <div class="hero-buttons">
+        <a href="signup.html" class="btn btn-primary">Join the Experience</a>
+        <a href="group.html" class="btn btn-secondary">Start Voting</a>
+      </div>
+
+      <div class="date-cards">
+        <div class="date-card">
+          <div class="date-label">Voting Starts</div>
+          <div class="date-value" id="startDate">Loading...</div>
+        </div>
+        <div class="date-card">
+          <div class="date-label">Voting Ends</div>
+          <div class="date-value" id="endDate">Loading...</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Content Section -->
+  <section class="content-section">
+    <div class="intro-card">
+      <h2 class="intro-title">Welcome to FilmHub</h2>
+      <p class="intro-text">
+      The Academy Awards, widely known for recognizing cinematic excellence, have inspired generations of filmmakers and audiences alike.
+      </p>
+      <p class="intro-text">
+        <strong>FilmHub</strong> brings that spirit closer to you — track nominees, vote on your favorites, explore films, and celebrate storytelling with the community.
+      </p>
+    </div>
+
+    <div class="feature-grid">
+      <div class="feature-card">
+        <div class="feature-icon">👤</div>
+        <h3 class="feature-title">Create Your Profile</h3>
+        <p class="feature-description">
+          Personalize your experience, save favorites, and participate in public polls with your unique profile.
+        </p>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon">🗳️</div>
+        <h3 class="feature-title">Vote & Engage</h3>
+        <p class="feature-description">
+          Cast your votes for your favorite nominees and see how your choices compare with other film enthusiasts.
+        </p>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon">🏆</div>
+        <h3 class="feature-title">Track Winners</h3>
+        <p class="feature-description">
+          Stay updated with live results, winner announcements, and comprehensive coverage of all categories.
+        </p>
+      </div>
+    </div>
+  </section>
+
+ <!-- Contact Us Footer Section -->
+<footer class="footer-contact" id="contact">
+  <div class="footer-contact-container">
+    <div class="footer-header">
+      <h2>Contact Us</h2>
+      <p>Have questions, feedback, or suggestions about CineAwards? We'd love to hear from you!</p>
+    </div>
+   <div class="footer-grid">
+  <!-- Contact Form -->
+  <div class="footer-column">
+    <h3>Drop us a line!</h3>
+    <form class="footer-form">
+      <input type="text" placeholder="Your Name" required>
+      <input type="email" placeholder="Your Email" required>
+      <textarea placeholder="Your Message" rows="3" required></textarea>
+      <button type="submit">Send Message</button>
+    </form>
+  </div>
+
+  <!-- Get in Touch -->
+  <div class="footer-column">
+    <h3>Get in Touch</h3>
+    <p>📧 cineawards@gmail.com</p>
+    <p>📞 +91 98765 43210</p>
+    <div class="socials">
+      <p><a href="#">📷 Instagram</a></p>
+      <p><a href="#">🐦 Twitter</a></p>
+      <p><a href="#">▶️ YouTube</a></p>
+    </div>
+  </div>
+
+  <!-- Explore CineAwards -->
+  <div class="footer-column">
+    <h3>Explore CineAwards</h3>
+    <ul>
+      <li>Vote for Nominees</li>
+      <li>Track Results Live</li>
+      <li>cineVoting 2025 Schedule</li>
+      <li>Community Picks & Highlights</li>
+    </ul>
+  </div>
+</div>
+
+</footer>
+  <script>
+    const BASE_URL = window.location.hostname === "localhost"
+  ? "http://localhost:3000"
+  : "https://cineawards.onrender.com";
+    document.addEventListener("DOMContentLoaded", function () {
+      fetch(`${BASE_URL}/category/dates/Best Actress`) 
+        .then(response => response.json())
+        .then(data => {
+          const start = new Date(data.startDate);
+          const end = new Date(data.endDate);
+          const formatOptions = {
+        year: 'numeric',
+        month: 'short',
+        day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit',
+        hour12: true
+      };          const now = new Date();
+          document.getElementById('startDate').textContent = 
+            start.toLocaleDateString('en-IN', formatOptions);
+          document.getElementById('endDate').textContent = 
+            end.toLocaleDateString('en-IN', formatOptions);
+            const indicator = document.getElementById('liveIndicator');
+         if (now >= start && now <= end) {
+        indicator.style.display = 'flex';
+        } else {
+          indicator.style.display = 'none';
+        }
+        })
+        .catch(error => {
+          document.getElementById('startDate').textContent = 'TBA';
+          document.getElementById('endDate').textContent = 'TBA';
+          const indicator = document.getElementById('liveIndicator');
+          indicator.style.display = 'none';
+        });
+    });
+  </script>
+</body>
+</html>

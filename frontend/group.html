@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CineAwards</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      /* Cinematic Color Palette */
+      --background: hsl(230, 25%, 8%);
+      --foreground: hsl(45, 100%, 85%);
+      --card: hsl(225, 20%, 12%);
+      --primary: hsl(280, 85%, 65%);
+      --secondary: hsl(195, 100%, 40%);
+      --accent: hsl(315, 100%, 50%);
+      --muted: hsl(45, 20%, 65%);
+      --border: hsl(225, 15%, 25%);
+      
+      /* Gradients */
+      --gradient-primary: linear-gradient(135deg, hsl(280, 85%, 65%), hsl(315, 100%, 50%));
+      --gradient-secondary: linear-gradient(135deg, hsl(195, 100%, 40%), hsl(280, 85%, 65%));
+      --gradient-background: linear-gradient(135deg, hsl(230, 25%, 8%), hsl(225, 20%, 12%));
+      --gradient-card: linear-gradient(135deg, hsl(225, 20%, 12%), hsl(225, 15%, 18%));
+      
+      /* Glow Effects */
+      --glow-primary: 0 0 30px hsl(280, 85%, 65%, 0.4);
+      --glow-secondary: 0 0 25px hsl(195, 100%, 40%, 0.4);
+      --glow-accent: 0 0 20px hsl(315, 100%, 50%, 0.4);
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--gradient-background);
+      color: var(--foreground);
+      min-height: 100vh;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    /* Background with cinema effects */
+   body::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: 
+    radial-gradient(circle at 20% 60%, hsl(150, 75%, 55%, 0.03) 0%, transparent 80%),
+    radial-gradient(circle at 60% 20%, hsl(195, 100%, 40%, 0.03) 0%, transparent 80%),
+    linear-gradient(to bottom right, rgba(0, 0, 0, 0.1), rgba(0,0,0,0.3)),
+    url('images/cinebg.png') center center / cover no-repeat;
+  z-index: 1;
+  pointer-events: none;
+}
+
+
+
+    /* Navbar */
+    .navbar {
+      position: relative;
+      z-index: 50;
+      background: linear-gradient(to right, hsla(225, 20%, 12%, 0.9), hsla(225, 20%, 12%, 0.6));
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid hsl(225, 15%, 25%, 0.5);
+      padding: 1rem 0;
+    }
+
+    .navbar-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 1.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+  .navbar-brand {
+  display: flex;
+  align-items: center;
+  height: 70px;
+}
+.navbar-brand {
+  padding-left: 20px;
+  display: flex;
+  height:45px;
+  align-items: center;
+  text-decoration: none;
+}
+.logo-image, .circular-logo {
+  height: 48px; 
+  width: 48px;
+}
+.cinema-navbar {
+  padding: 0.5rem 0; 
+}
+
+.logo-container {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding-left: 20px;
+}
+
+.circular-logo {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  border: 2px solid #e07be0; 
+  object-fit: cover;
+  background-color: black; 
+}
+
+.logo-text {
+  background: linear-gradient(90deg, #db4eff, #6c63ff, #00c9ff);
+ background-clip: text;             
+  -webkit-background-clip: text;      
+  -webkit-text-fill-color: transparent;
+  font-weight: 700;
+  font-size: 1.6rem;
+  text-decoration: none;
+}
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+    }
+
+    .nav-link {
+      color: hsla(45, 100%, 85%, 0.8);
+      text-decoration: none;
+      font-weight: 500;
+      transition: color 0.3s ease;
+    }
+
+    .nav-link:hover {
+      color: var(--primary);
+    }
+
+    .btn {
+      padding: 0.5rem 1rem;
+      border: 1px solid hsl(280, 85%, 65%, 0.3);
+      background: transparent;
+      color: var(--primary);
+      border-radius: 0.5rem;
+      text-decoration: none;
+      font-weight: 500;
+      transition: all 0.3s ease;
+      cursor: pointer;
+    }
+
+    .btn:hover {
+      background: var(--primary);
+      color: white;
+    }
+
+    /* Main Content */
+    .main-content {
+      position: relative;
+      z-index: 10;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 4rem 1.5rem;
+    }
+
+    .hero-section {
+      text-align: center;
+      margin-bottom: 4rem;
+      animation: cinema-entrance 0.8s ease-out forwards;
+    }
+
+    .hero-title {
+      font-size: clamp(3rem, 8vw, 6rem);
+      font-weight: 700;
+      margin-bottom: 1.5rem;
+      background: var(--gradient-primary);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .hero-subtitle {
+      font-size: 1.25rem;
+      color: var(--muted);
+      max-width: 42rem;
+      margin: 0 auto;
+    }
+     .profile-dropdown {
+      position: relative;
+      cursor: pointer;
+    }
+
+    .profile-icon {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      transition: transform 0.2s;
+      border: 2px solid var(--primary);
+    }
+
+    .profile-icon:hover {
+      transform: scale(1.1);
+      box-shadow: none;
+    }
+
+     .dropdown-menu {
+  position: absolute;
+  top: 42px;
+  right: 0;
+  background: hsl(225, 20%, 15%);
+  border: 1px solid hsl(225, 15%, 25%);
+  border-radius: 8px;
+  padding: 1rem 0;
+  min-width: 120px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-6px);
+  transition: all 0.25s ease;
+  z-index: 1000;
+}
+
+   .profile-dropdown:hover .dropdown-menu {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+
+ .dropdown-item {
+  padding: 0.4rem 1rem;
+  font-size: 0.88rem;
+  font-weight: 500;
+  color: var(--foreground);
+  text-decoration: none;
+  display: block;
+  transition: background 0.25s ease;
+}
+
+.dropdown-item:hover {
+  background: hsl(225, 15%, 20%);
+}
+
+
+.logout-btn {
+  color: #f5deb3; 
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-weight: 500;
+  font-size: 0.88rem;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  padding: 0.4rem 1rem;
+  transition: background 0.25s ease, color 0.25s ease;
+}
+
+.logout-btn:hover {
+  background: hsl(225, 15%, 20%);
+  color: #ff4d4d; 
+}
+
+.logout-btn i {
+  font-size: 0.9rem;
+}
+
+    /* Groups Grid */
+    .groups-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 2rem;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    .group-card {
+      position: relative;
+      background: var(--gradient-card);
+      border: 1px solid hsl(225, 15%, 25%, 0.3);
+      border-radius: 0.75rem;
+      padding: 2rem;
+      text-align: center;
+      cursor: pointer;
+      overflow: hidden;
+      transition: all 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+      animation: cinema-entrance 0.8s ease-out forwards;
+    }
+
+    .group-card:nth-child(1) { animation-delay: 0.2s; }
+    .group-card:nth-child(2) { animation-delay: 0.4s; }
+    .group-card:nth-child(3) { animation-delay: 0.6s; }
+    .group-card:nth-child(4) { animation-delay: 0.8s; }
+
+    .group-card:hover {
+      transform: perspective(1000px) rotateX(10deg) rotateY(-10deg) scale(1.05);
+      box-shadow: var(--glow-primary), 0 25px 50px -12px hsla(0, 0%, 0%, 0.8);
+    }
+
+    .group-title {
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+      background: var(--gradient-primary);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .group-count {
+      font-size: 0.875rem;
+      color: var(--muted);
+      margin-bottom: 1.5rem;
+    }
+
+    .group-btn {
+      padding: 0.75rem 1.5rem;
+      border: 1px solid hsl(280, 85%, 65%, 0.3);
+      background: transparent;
+      color: var(--primary);
+      border-radius: 0.5rem;
+      font-weight: 500;
+      transition: all 0.3s ease;
+      cursor: pointer;
+    }
+
+    .group-btn:hover {
+      background: var(--primary);
+      color: white;
+    }
+
+    /* Hover Overlay */
+    .group-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, hsla(195, 100%, 40%, 0.9), hsla(280, 85%, 65%, 0.9));
+      backdrop-filter: blur(8px);
+      padding: 2rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.5s ease;
+    }
+
+    .group-card:hover .group-overlay {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .overlay-title {
+      font-size: 1.125rem;
+      font-weight: 600;
+      color: white;
+      margin-bottom: 1rem;
+    }
+
+   .category-list {
+  list-style: disc;
+  padding-left: 1.5rem;
+  margin: 0;
+  text-align: left;
+}
+
+.category-item {
+  font-size: 0.95rem;
+  color: hsla(0, 0%, 100%, 0.9);
+  margin-bottom: 0.4rem;
+  opacity: 0;
+  transform: translateY(20px);
+  animation: flow-in 0.5s ease-out forwards;
+}
+    .category-item:nth-child(1) { animation-delay: 0.1s; }
+    .category-item:nth-child(2) { animation-delay: 0.2s; }
+    .category-item:nth-child(3) { animation-delay: 0.3s; }
+    .category-item:nth-child(4) { animation-delay: 0.4s; }
+
+    /* Animations */
+    @keyframes cinema-entrance {
+      0% {
+        opacity: 0;
+        transform: translateY(30px) scale(0.9);
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    @keyframes flow-in {
+      0% {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes pulse {
+      0%, 100% {
+        opacity: 0.6;
+      }
+      50% {
+        opacity: 1;
+      }
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .navbar-container {
+        padding: 0 1rem;
+      }
+
+      .nav-links {
+        gap: 1rem;
+      }
+
+      .main-content {
+        padding: 2rem 1rem;
+      }
+
+      .hero-section {
+        margin-bottom: 2rem;
+      }
+
+      .groups-grid {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+      }
+
+      .group-card {
+        padding: 1.5rem;
+      }
+    }
+     .recommend-card {
+  width: 380px;
+  margin: 0 auto;
+  padding: 25px;
+  border-radius: 16px;
+  background: rgba(255,255,255,0.05);
+  backdrop-filter: blur(15px);
+  border: 1px solid var(--accent);
+  box-shadow: var(--glow-accent);
+  cursor: pointer;
+  transition: 0.3s ease;
+}
+
+.recommend-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 0 40px hsl(315, 100%, 50%, 0.6);
+}
+
+.recommend-card h4 {
+  font-size: 1.5rem;
+  margin-bottom: 10px;
+  background: var(--gradient-primary);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+  </style>
+</head>
+<body>
+  <!-- Navbar -->
+  <nav class="navbar">
+    <div class="navbar-container">
+     <a href="home.html" class="navbar-brand logo-wrapper">
+  <div class="navbar-brand logo-container">
+  <img src="images/logo2pr.png" alt="CineAwards Logo" class="circular-logo">
+  <span class="logo-text">CineAwards</span>
+</div>
+</a>
+      <div class="nav-links">
+        <a href="home.html" class="nav-link">Home</a>
+        <a href="results.html" class="nav-link">Winners</a>
+        <a href="categories.html" class="nav-link">Categories</a>
+        <div class="profile-dropdown">
+  <img src="https://cdn-icons-png.flaticon.com/512/149/149071.png" alt="Profile" class="profile-icon">
+  <div class="dropdown-menu">
+    <a href="profile.html" class="dropdown-item">👤 Profile</a>
+    <button onclick="logout()" class="dropdown-item logout-btn">
+      <i class="fa fa-sign-out" aria-hidden="true" style="margin-right: 6px;"></i>Logout
+    </button>
+  </div>
+</div>
+
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Content -->
+  <main class="main-content">
+    <section class="hero-section">
+      <h1 class="hero-title">Award Categories</h1>
+      <p class="hero-subtitle">
+        Explore our cinematic awards by category groups. Hover to see categories, click to dive deeper.
+      </p>
+    </section>
+    <section id="recommendedSection" style="display:none; margin-bottom:40px; text-align:center;">
+  <h3 style="color: var(--accent); margin-bottom:20px;">
+    ✨ Recommended For You
+  </h3>
+  <div id="recommendedCard"></div>
+</section>
+    <div class="groups-grid" id="groupsGrid">
+    
+    </div>
+  </main>
+
+
+ <script>
+const BASE_URL =
+  window.location.hostname === "localhost"
+    ? "http://localhost:3000"
+    : "https://cineawards.onrender.com";
+
+async function loadRecommendation() {
+  const token = localStorage.getItem("token");
+  if (!token) return;
+
+  try {
+    const res = await fetch(`${BASE_URL}/recommendations`, {
+      headers: {
+        Authorization: "Bearer " + token
+      }
+    });
+
+    const data = await res.json();
+    if (!data.recommendedGroup) return;
+
+    const section = document.getElementById("recommendedSection");
+    const card = document.getElementById("recommendedCard");
+
+    section.style.display = "block";
+
+    card.innerHTML = `
+      <div class="recommend-card" onclick="goToGroup('${data.recommendedGroup}')">
+        <h4>${data.recommendedGroup}</h4>
+        <p>Based on your voting activity, this category group matches your interests.</p>
+        <small style="opacity:0.7;">AI-Powered Recommendation</small>
+      </div>
+    `;
+
+  } catch (err) {
+    console.error("Recommendation error:", err);
+  }
+}
+
+function goToGroup(group) {
+  window.location.href = `categories.html?group=${encodeURIComponent(group)}`;
+}
+
+async function loadGroups() {
+  try {
+    const res = await fetch(`${BASE_URL}/category/grouped`);
+    const groupMap = await res.json();
+    const groupsGrid = document.getElementById('groupsGrid');
+
+    if (Object.keys(groupMap).length === 0) {
+      groupsGrid.innerHTML = `<p style="color: var(--muted); text-align: center;">No categories available.</p>`;
+      return;
+    }
+
+    Object.entries(groupMap).forEach(([group, categories], i) => {
+      const groupCard = document.createElement('div');
+      groupCard.className = 'group-card';
+      groupCard.style.animationDelay = `${i * 0.2}s`;
+      groupCard.onclick = () => {
+        window.location.href = `categories.html?group=${encodeURIComponent(group)}`;
+      };
+
+      groupCard.innerHTML = `
+        <div>
+          <h3 class="group-title">${group}</h3>
+          <div class="group-count">${categories.length} categories</div>
+          <button class="group-btn">Explore ${group}</button>
+        </div>
+        <div class="group-overlay">
+          <h4 class="overlay-title">Categories in ${group}:</h4>
+          <ul class="category-list">
+            ${categories.map((c, j) => 
+              `<li class="category-item" style="animation-delay:${(j + 1) * 0.1}s">${c.name}</li>`
+            ).join('')}
+          </ul>
+        </div>
+      `;
+
+      groupsGrid.appendChild(groupCard);
+    });
+
+  } catch (err) {
+    console.error('Failed to load groups', err);
+  }
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  loadRecommendation();
+  loadGroups();
+});
+
+function logout() {
+  localStorage.removeItem('token');
+  window.location.href = 'login.html';
+}
+</script>
+</body>
+</html>

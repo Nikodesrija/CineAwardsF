@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CineAwards</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --background: hsl(230, 25%, 8%);
+      --foreground: hsl(45, 100%, 85%);
+      --card: hsl(225, 20%, 12%);
+      --primary: hsl(280, 85%, 65%);
+      --secondary: hsl(195, 100%, 40%);
+      --accent: hsl(315, 100%, 50%);
+      --muted: hsl(45, 20%, 65%);
+      --border: hsl(225, 15%, 25%);
+      
+      --gradient-primary: linear-gradient(135deg, hsl(280, 85%, 65%), hsl(315, 100%, 50%));
+      --gradient-secondary: linear-gradient(135deg, hsl(195, 100%, 40%), hsl(280, 85%, 65%));
+      --gradient-background: linear-gradient(135deg, hsl(230, 25%, 8%), hsl(225, 20%, 12%));
+      --gradient-card: linear-gradient(135deg, hsl(225, 20%, 12%), hsl(225, 15%, 18%));
+      
+      --glow-primary: 0 0 30px hsl(280, 85%, 65%, 0.4);
+      --glow-secondary: 0 0 25px hsl(195, 100%, 40%, 0.4);
+      --glow-accent: 0 0 20px hsl(315, 100%, 50%, 0.4);
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--gradient-background);
+      color: var(--foreground);
+      min-height: 100vh;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: 
+          url('images/cinebg.png') center center / cover no-repeat;
+      pointer-events: none;
+    }
+
+    /* Navbar */
+    .navbar {
+      position: relative;
+      z-index: 40;
+      background: linear-gradient(to right, hsla(225, 20%, 12%, 0.95), hsla(225, 20%, 12%, 0.8));
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid hsl(225, 15%, 25%, 0.5);
+      padding: 1rem 0;
+    }
+
+    .navbar-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 1.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+     .navbar-brand {
+  display: flex;
+  align-items: center;
+  height: 70px;
+}
+.navbar-brand {
+  padding-left: 20px;
+  height:50px;
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+}
+.logo-image, .circular-logo {
+  height: 48px; 
+  width: 48px;
+}
+.cinema-navbar {
+  padding: 0.5rem 0; 
+}
+
+.logo-container {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding-left: 20px;
+}
+
+.circular-logo {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  border: 2px solid #e07be0; 
+  object-fit: cover;
+  background-color: black; 
+}
+
+.logo-text {
+  background: linear-gradient(90deg, #db4eff, #6c63ff, #00c9ff);
+background-clip: text;              
+  -webkit-background-clip: text;     
+  -webkit-text-fill-color: transparent;
+  font-weight: 700;
+  font-size: 1.6rem;
+  text-decoration: none;
+}
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+    }
+
+    .nav-link {
+      color: hsla(45, 100%, 85%, 0.8);
+      text-decoration: none;
+      font-weight: 500;
+      transition: color 0.3s ease;
+    }
+
+    .nav-link:hover {
+      color: var(--primary);
+    }
+
+    .btn {
+      padding: 0.5rem 1rem;
+      border: 1px solid hsl(280, 85%, 65%, 0.3);
+      background: transparent;
+      color: var(--primary);
+      border-radius: 0.5rem;
+      text-decoration: none;
+      font-weight: 500;
+      transition: all 0.3s ease;
+      cursor: pointer;
+    }
+
+    .btn:hover {
+      background: var(--primary);
+      color: white;
+    }
+
+    /* Main Content */
+    .main-content {
+      position: relative;
+      z-index: 10;
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 4rem 1.5rem;
+    }
+
+    .form-container {
+      background: var(--gradient-card);
+      border: 1px solid hsl(225, 15%, 25%, 0.3);
+      border-radius: 1rem;
+      padding: 2.5rem;
+      backdrop-filter: blur(16px);
+      box-shadow: var(--glow-primary);
+      animation: cinema-entrance 0.8s ease-out forwards;
+    }
+
+    .form-header {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+
+    .form-title {
+      font-size: 2rem;
+      font-weight: 700;
+      background: var(--gradient-primary);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 0.5rem;
+    }
+
+    .form-subtitle {
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
+
+    .form-group {
+      margin-bottom: 1.5rem;
+    }
+
+    .form-label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: 600;
+      color: var(--foreground);
+      font-size: 0.95rem;
+    }
+
+    .form-input {
+      width: 100%;
+      padding: 0.875rem 1rem;
+      background: hsl(225, 20%, 10%);
+      border: 1px solid hsl(225, 15%, 25%);
+      border-radius: 0.5rem;
+      color: var(--foreground);
+      font-size: 0.95rem;
+      transition: all 0.3s ease;
+    }
+
+    .form-input:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px hsl(280, 85%, 65%, 0.1);
+    }
+
+    .form-input:read-only {
+      background: hsl(225, 20%, 8%);
+      color: var(--muted);
+      cursor: not-allowed;
+      border-color: hsl(225, 15%, 20%);
+    }
+
+    .form-button {
+      width: 100%;
+      padding: 0.875rem 1rem;
+      background: var(--gradient-primary);
+      border: none;
+      border-radius: 0.5rem;
+      color: white;
+      font-weight: 600;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      margin-top: 1rem;
+    }
+
+    .form-button:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--glow-primary);
+    }
+
+    .form-button:active {
+      transform: translateY(0);
+    }
+
+    .message {
+      margin-top: 1rem;
+      padding: 0.875rem 1rem;
+      border-radius: 0.5rem;
+      text-align: center;
+      font-weight: 600;
+      opacity: 0;
+      transform: translateY(10px);
+      transition: all 0.3s ease;
+    }
+
+    .message.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .message.success {
+      background: hsl(120, 100%, 25%, 0.2);
+      border: 1px solid hsl(120, 100%, 40%);
+      color: hsl(120, 100%, 70%);
+    }
+
+    .message.error {
+      background: hsl(0, 100%, 25%, 0.2);
+      border: 1px solid hsl(0, 100%, 40%);
+      color: hsl(0, 100%, 70%);
+    }
+
+    /* Animations */
+    @keyframes cinema-entrance {
+      0% {
+        opacity: 0;
+        transform: translateY(30px) scale(0.9);
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .navbar-container {
+        padding: 0 1rem;
+      }
+
+      .nav-links {
+        gap: 1rem;
+      }
+
+      .main-content {
+        padding: 2rem 1rem;
+      }
+
+      .form-container {
+        padding: 2rem;
+      }
+
+      .form-title {
+        font-size: 1.75rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Navbar -->
+  <nav class="navbar">
+    <div class="navbar-container">
+     <a href="home.html" class="navbar-brand logo-wrapper">
+  <div class="navbar-brand logo-container">
+  <img src="images/logo2pr.png" alt="CineAwards Logo" class="circular-logo">
+  <span class="logo-text">CineAwards</span>
+</div>
+</a>
+      <div class="nav-links">
+        <a href="home.html" class="nav-link">Home</a>
+        <a href="group.html" class="nav-link">Nominate</a>
+        <a href="categories.html" class="nav-link">Categories</a>
+        <a href="profile.html" class="nav-link">Profile</a>
+        <button class="btn" onclick="logout()">Logout</button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Content -->
+  <main class="main-content">
+    <div class="form-container">
+      <div class="form-header">
+        <h1 class="form-title">Edit Profile</h1>
+        <p class="form-subtitle">Update your personal information</p>
+      </div>
+
+      <form id="editProfileForm">
+        <div class="form-group">
+          <label class="form-label">User Name (readonly)</label>
+          <input type="text" id="username" name="username" class="form-input" readonly />
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Name</label>
+          <input type="text" id="name" name="name" class="form-input" required />
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Age</label>
+          <input type="number" id="age" name="age" class="form-input" required />
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Mobile</label>
+          <input type="text" id="mobile" name="mobile" class="form-input" required />
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Address</label>
+          <input type="text" id="address" name="address" class="form-input" required />
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">New Password (leave blank to keep existing)</label>
+          <input type="password" id="password" name="password" class="form-input" />
+        </div>
+
+        <button type="submit" class="form-button">Update Profile</button>
+        <div class="message" id="message"></div>
+      </form>
+    </div>
+  </main>
+
+  <script>
+    const BASE_URL = window.location.hostname === "localhost"
+  ? "http://localhost:3000"
+  : "https://cineawards.onrender.com";
+    const token = localStorage.getItem('token');
+
+    async function loadProfile() {
+      try {
+        const res = await fetch(`${BASE_URL}/user/profile`, {
+          method: 'GET',
+          headers: { 'Authorization': 'Bearer ' + token }
+        });
+        const user = await res.json();
+
+        document.getElementById('username').value = user.username;
+        document.getElementById('name').value = user.name;
+        document.getElementById('age').value = user.age;
+        document.getElementById('mobile').value = user.mobile;
+        document.getElementById('address').value = user.address;
+      } catch (err) {
+        showMessage('Failed to load profile.', 'error');
+      }
+    }
+
+    function showMessage(text, type) {
+      const msg = document.getElementById('message');
+      msg.textContent = text;
+      msg.className = `message ${type} show`;
+      
+      setTimeout(() => {
+        msg.classList.remove('show');
+      }, 5000);
+    }
+
+    document.getElementById('editProfileForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const name = document.getElementById('name').value;
+      const age = document.getElementById('age').value;
+      const mobile = document.getElementById('mobile').value;
+      const address = document.getElementById('address').value;
+      const password = document.getElementById('password').value;
+
+      const payload = { name, age, mobile, address };
+      if (password.trim()) {
+        payload.password = password;
+      }
+
+      try {
+        const res = await fetch(`${BASE_URL}/user/edit-profile`, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + token
+          },
+          body: JSON.stringify(payload)
+        });
+
+        const result = await res.json();
+
+        if (res.ok) {
+          showMessage('Profile updated successfully!', 'success');
+          document.getElementById('password').value = '';
+        } else {
+          showMessage(result.message || 'Update failed.', 'error');
+        }
+      } catch (err) {
+        showMessage('Error updating profile.', 'error');
+      }
+    });
+
+    function logout() {
+      localStorage.removeItem('token');
+      window.location.href = 'login.html';
+    }
+    loadProfile();
+  </script>
+</body>
+</html>
