@@ -136,17 +136,6 @@ http://localhost:5000
 
 ---
 
-# ⭐ Project Highlights
-
-✔ Full Stack Project  
-✔ AI Integrated  
-✔ Secure Authentication  
-✔ Real-world Voting System  
-✔ Hackathon Ready  
-✔ Modern Cinematic UI  
-
----
-
 <div align="center">
 
 # 🎬 CineAwards
