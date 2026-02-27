@@ -23,7 +23,6 @@ async function generateExplanation(categoryName, groupName) {
   } catch (error) {
     console.error("HF Error:", error.message);
 
-    // Fallback (VERY IMPORTANT FOR DEMO)
     return `Based on your activity in ${groupName}, we recommend exploring ${categoryName}.`;
   }
 }
