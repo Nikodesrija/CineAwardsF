@@ -544,10 +544,9 @@
   : "https://cineawards.onrender.com";
 async function loadGroupsAndWinners() {
   try {
-    const [groupRes, dateRes, winRes] = await Promise.all([
+    const [groupRes, winRes] = await Promise.all([
      fetch(`${BASE_URL}/category/grouped`),
-  fetch(`${BASE_URL}/category/dates/Best Actress`),
-  fetch(`${BASE_URL}/win/result`, {
+  fetch(`${BASE_URL}/win/result`,{
         headers: { 'Authorization': 'Bearer ' + localStorage.getItem('token') }
       })
     ]);
@@ -556,11 +555,7 @@ async function loadGroupsAndWinners() {
     const winners = await winRes.json();
 
     // Use startDate and endDate from Best Actress as reference
-    const { startDate, endDate } = await dateRes;
-    const now = new Date();
-    const announceDate = new Date(endDate);
-    announceDate.setDate(announceDate.getDate() + 1);
-    const showWinner = now >= announceDate;
+   const showWinner = true;
 
     const groupsContainer = document.getElementById('groups');
     groupsContainer.innerHTML = ''; // Clear existing content
@@ -591,7 +586,6 @@ async function loadGroupsAndWinners() {
               ${winner.role ? `<p><strong>Role:</strong> ${winner.role}</p>` : ''}
               ${winner.workTitle ? `<p><strong>Work:</strong> ${winner.workTitle}</p>` : ''}
               <p><strong>Votes:</strong> ${winner.voteCount}</p>
-              <p><em>Announced on: <strong>${announceDate.toLocaleDateString()}</strong></em></p>
             </div>
           `;
           catSec.append(card);
