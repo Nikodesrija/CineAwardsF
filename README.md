@@ -69,7 +69,8 @@ Designed with a **modern neon cinematic interface** inspired by film award cerem
 
 </div>
 
-```
+---
+
 # 📂 Project Structure
 
 ```
