@@ -2,7 +2,7 @@
 
 # 🎬 CineAwards – Cinematic Voting Platform
 
-<img src="screenshots/results.png" width="1000">
+<img src="screenshots/home.png" width="1000">
 
 ### ✨ AI Powered Movie Awards Voting System
 
@@ -13,11 +13,11 @@ A **full-stack cinematic voting platform** where users vote for nominees with
 
 ---
 
-![NodeJS](https://img.shields.io/badge/Node.js-Backend-2ecc71?style=for-the-badge)
-![MongoDB](https://img.shields.io/badge/MongoDB-Database-27ae60?style=for-the-badge)
-![Express](https://img.shields.io/badge/Express.js-Server-34495e?style=for-the-badge)
-![JWT](https://img.shields.io/badge/JWT-Security-3498db?style=for-the-badge)
-![AI](https://img.shields.io/badge/HuggingFace-AI-f1c40f?style=for-the-badge)
+![NodeJS](https://img.shields.io/badge/Node.js-Backend-8e44ad?style=for-the-badge)
+![MongoDB](https://img.shields.io/badge/MongoDB-Database-9b59b6?style=for-the-badge)
+![Express](https://img.shields.io/badge/Express.js-Server-2c3e50?style=for-the-badge)
+![JWT](https://img.shields.io/badge/JWT-Security-e84393?style=for-the-badge)
+![AI](https://img.shields.io/badge/HuggingFace-AI-ff00ff?style=for-the-badge)
 
 </div>
 
@@ -25,11 +25,13 @@ A **full-stack cinematic voting platform** where users vote for nominees with
 
 # 🌌 Project Overview
 
-**CineAwards** is a cinematic-themed voting platform inspired by real-world movie award ceremonies.
+**CineAwards** is a **cinematic-themed voting platform** inspired by real-world movie award ceremonies.
 
 Users can securely vote for nominees and view winners after voting ends.
 
 The platform includes an **AI-based recommendation system** powered by HuggingFace.
+
+Designed with a **modern neon cinematic interface** inspired by film award ceremonies.
 
 ---
 
@@ -40,7 +42,7 @@ The platform includes an **AI-based recommendation system** powered by HuggingFa
 ✔ 🔐 Secure Login & Registration  
 ✔ 🆔 Unique Voter ID Generation  
 ✔ 🪪 Aadhar Validation  
-✔ 🗳️ One Vote Per Category  
+✔ 🗳 One Vote Per Category  
 ✔ 📊 Results After Voting Ends  
 
 ---
@@ -48,14 +50,14 @@ The platform includes an **AI-based recommendation system** powered by HuggingFa
 ## 🔑 Admin Panel
 
 ✔ ➕ Add Categories & Nominees  
-✔ ✏️ Edit Nominees  
+✔ ✏ Edit Nominees  
 ✔ 📅 Set Voting Dates  
 ✔ 🏆 Announce Winners  
 ✔ 📊 Control Voting Period
 
 ---
 
-## 🗳️ Smart Voting Flow
+## 🗳 Smart Voting Flow
 
 🎭 Category Groups
 
@@ -102,25 +104,25 @@ Powered by **HuggingFace API**
 
 ## 🎨 Frontend
 
-- HTML
-- CSS
-- JavaScript
+- HTML  
+- CSS  
+- JavaScript  
 
 ---
 
 ## ⚙ Backend
 
-- Node.js
-- Express.js
-- MongoDB Atlas
-- Mongoose
+- Node.js  
+- Express.js  
+- MongoDB Atlas  
+- Mongoose  
 
 ---
 
 ## 🤖 AI
 
-- HuggingFace API
-- Axios
+- HuggingFace API  
+- Axios  
 
 ---
 
@@ -128,11 +130,11 @@ Powered by **HuggingFace API**
 
 <div align="center">
 
-<img src="screenshots/systemarch.png" width="800">
+<img src="screenshots/systemarch.png" width="750">
 
 </div>
 
-Architecture Flow:
+### Architecture Flow
 
 ```
 User Browser
@@ -146,18 +148,21 @@ Node.js + Express
 MongoDB Atlas
      ↓
 HuggingFace AI API
+     ↓
+AI Voting Recommendation Engine
 ```
 
 ---
 
-# 📸 Project 
+# 📸 Project Screenshots
 
 ## 🏠 Home Page
 
 <img src="screenshots/home.png" width="900">
 
 ---
-## 🏆 Results Page
+
+## 🤖 AI Recommendation
 
 <img src="screenshots/recom.png" width="900">
 
@@ -193,7 +198,7 @@ cineawards/
 
 ---
 
-# ⚙️ Installation
+# ⚙ Installation
 
 ## 1️⃣ Install Dependencies
 
