@@ -151,35 +151,6 @@ HuggingFace AI API
      ↓
 AI Voting Recommendation Engine
 ```
-
----
-
-# 📸 Project Screenshots
-
-## 🏠 Home Page
-
-<img src="screenshots/home.png" width="900">
-
----
-
-## 🤖 AI Recommendation
-
-<img src="screenshots/recom.png" width="900">
-
----
-
-## 🗳 Voting Page
-
-<img src="screenshots/voting.png" width="900">
-
----
-
-## 🏆 Results Page
-
-<img src="screenshots/results.png" width="900">
-
----
-
 # 📂 Project Structure
 
 ```
