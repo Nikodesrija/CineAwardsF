@@ -35,71 +35,6 @@ Designed with a **modern neon cinematic interface** inspired by film award cerem
 
 ---
 
-# ✨ Key Features
-
-## 👤 User System
-
-✔ 🔐 Secure Login & Registration  
-✔ 🆔 Unique Voter ID Generation  
-✔ 🪪 Aadhar Validation  
-✔ 🗳 One Vote Per Category  
-✔ 📊 Results After Voting Ends  
-
----
-
-## 🔑 Admin Panel
-
-✔ ➕ Add Categories & Nominees  
-✔ ✏ Edit Nominees  
-✔ 📅 Set Voting Dates  
-✔ 🏆 Announce Winners  
-✔ 📊 Control Voting Period
-
----
-
-## 🗳 Smart Voting Flow
-
-🎭 Category Groups
-
-- Acting
-- Directing
-- Technical
-- Writing
-
-✔ Dynamic Categories Loading  
-✔ Dynamic Nominee Loading  
-✔ Time Controlled Voting  
-
----
-
-# 🤖 AI Recommendation System
-
-Powered by **HuggingFace API**
-
-### Features
-
-✔ 📈 Voting Frequency Analysis  
-✔ 🎯 Smart Nominee Suggestions  
-✔ 🤖 AI-Based Recommendations  
-✔ ⚡ Real-time Suggestions  
-
-### Integration
-
-- HuggingFace API
-- Axios
-- Node.js
-
----
-
-# 🔐 Security
-
-✔ JWT Authentication  
-✔ Password Hashing (bcryptjs)  
-✔ Protected Routes  
-✔ Role Based Access  
-
----
-
 # 🛠 Tech Stack
 
 ## 🎨 Frontend
@@ -134,22 +69,6 @@ Powered by **HuggingFace API**
 
 </div>
 
-### Architecture Flow
-
-```
-User Browser
-     ↓
-Frontend (HTML/CSS/JS)
-     ↓
-REST APIs
-     ↓
-Node.js + Express
-     ↓
-MongoDB Atlas
-     ↓
-HuggingFace AI API
-     ↓
-AI Voting Recommendation Engine
 ```
 # 📂 Project Structure
 
@@ -213,14 +132,6 @@ http://localhost:5000
 ✔ 🔔 Live Voting Results  
 ✔ 🔐 OTP Login  
 ✔ ⛓ Blockchain Voting  
-
----
-
-# 👩‍💻 Developer
-
-### **Srija**
-
-Full Stack Developer
 
 ---
 
